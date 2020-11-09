@@ -28,15 +28,19 @@ on("sheet:opened", (e) => {
       });
 
       function updateListSkills(values) {
-        values = Object.entries(values);
+        let references = [];
 
-        let updates = {};
-
-        _.each(values, (item) => {
-          updates[item[0]] = item[1];
+        _.each(Object.entries(values), (item) => {
+          references.push(item[0].replace('skill_name', 'skill_mod'));
         });
 
-        setAttrs(updates);
+        getAttrs(references, (vals) => {
+          _.each(references, (item) => {
+            let code = vals[item].replace('_mod', '_code');
+
+            setAttrs({ [item.replace('skill_mod', 'skill_code')]: code }, { silent: true });
+          });
+        });
       }
 
       TETRA.doWithRepList('engrams', ['skill_name'], (v) => { updateListSkills(v) });
@@ -240,7 +244,8 @@ const skills = ['academics', 'athletics', 'battle', 'boating', 'common_knowledge
                 'repair', 'research', 'riding', 'science', 'shooting', 'stealth',
                 'survival', 'taunt', 'thievery', 'gambling', 'hacking', 'faith',
                 'focus', 'language', 'occult', 'psionics', 'spellcasting',
-                'weird_science', 'custom_skill_1', 'custom_skill_2', 'unskilled'];
+                'weird_science', 'custom_skill_1', 'custom_skill_2', 'custom_skill_3',
+                'custom_skill_4', 'custom_skill_5', 'custom_skill_6', 'unskilled'];
 
 const skillDice = ['d4-2', 'd4', 'd6', 'd8', 'd10', 'd12'];
 
